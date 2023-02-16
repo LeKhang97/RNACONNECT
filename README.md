@@ -2,7 +2,7 @@
 This project aims to build the interactive RNA-Protein interaction network on webserver, where people can submit their Proteins/RNAs code and get their neighbor interactions and perform the Breadth-First Search (BFS). 
 
 ## The BFS
-The BFS_func.cpp can be served as independent program to search the shortest distance, as well as providing all shortest paths between 2 vertices.
+The <b>BFS_func.cpp</b> can be served as independent program to search the shortest distance, as well as providing all shortest paths between 2 vertices.
 
 ### Install dependencies
 To make this file, you have to have the <b>Boost.Program_options</b>. Follow the install instruction in this [website](https://www.boost.org/).
