@@ -24,8 +24,8 @@ Options:
 
 
 ### Notes
-- When ```--graph``` is not called, the program will use the graph in <i>demo_graph.json</i> in the directory by default. There is also a file <i>larger_demo_graph.json</i>, which is much larger in the directory, you can try it as an input.
-- When you use```--graph``` option, make sure that your <b>json</b> file contains only <b>string</b> type information. 
+- When ```--graph``` option is not called, the program will use the graph in <i>demo_graph.json</i> in the directory by default. There is also a file <i>larger_demo_graph.json</i>, which is much larger in the directory, you can try it as an input.
+- When ```--graph``` is called, make sure that your <b>json</b> file contains only <b>string</b> type information. 
 - If there is no path between <b>Start node</b> and <b>End node</b>, their distance is set to <b>-1</b> and no path is provided.
 - If one node is used for both <b>Start</b> and <b>End node</b>, if it's self-interacted, the distance will be <b>1</b>, otherwise <b>0</b>.
 
