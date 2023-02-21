@@ -4,11 +4,8 @@ This project aims to build the interactive RNA-Protein interaction network on we
 ## The BFS
 The <b>BFS_func.cpp</b> can be served as independent program to search the shortest distance, as well as providing all shortest paths between 2 vertices.
 
-### Install dependencies
-To make this file, you have to have the <b>Boost.Program_options</b>. Follow the install instruction in this [website](https://www.boost.org/).
-
 ### Usage
-Once having the dependencies, you can compile this file:<br>
+You can compile this file by:<br>
 ```g++ BFS_func.cpp -o BFS_func -lboost_program_options```
 
 Then type ```./BFS_func -h``` for more information of the usage:
