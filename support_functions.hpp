@@ -4,6 +4,7 @@
 #include<vector>
 #include<map>
 #include<algorithm>
+#include <getopt.h>
 #include"json.hpp"
 
 using json = nlohmann::json;
@@ -53,7 +54,8 @@ vector<vector<string>> duplicate_vector(vector<string> input_vector, int number,
     return output_vector;
 }
 
-Shortest_path BFS(map<string, vector<string>> graph, string startNode, string endNode){
+Shortest_path BFS(map<string, vector<string>> graph, string startNode, string endNode, 
+bool distance_only = false){
     vector<string> visited = {startNode}, queue = {startNode}, keys, lastnodes = {startNode};
     int s = 0, flag = 1;
     vector<vector<string>> visited_list;
@@ -102,37 +104,43 @@ Shortest_path BFS(map<string, vector<string>> graph, string startNode, string en
                         if(neighbor == endNode){
                             shortestpath.distance = s + 1;
                             flag = 0;
-                        }
-                    }
-                }
-                vector<vector<string>> v = visited_list;
-                int u = 0;
-                if(v.size() > 0){
-                    for(int index = 0; index < v.size(); index++){
-                        int a = visited_list.size() - v.size();
-                        if((v[index].back() == currentNode)){
-                            vector<vector<string>> m = duplicate_vector(v[index], temp_visited_list.size(),temp_visited_list);
-                            if(m.size()){
-                                for(int i = v.size() - 1; i > index + u -a -1 ; i--){
-                                    visited_list.pop_back();
-                                }
-                                for(vector<string> sub_m :m){
-                                    visited_list.push_back(sub_m);
-                                    if(sub_m.back() == endNode){
-                                        shortestpath.path.push_back(sub_m);
-                                    }
-                                }
-                                if(v.size() - (index+u+1) > 0){
-                                    for(int i = index+u+1-a ; i < v.size(); i++){
-                                        visited_list.push_back(v[i]);
-                                    }
-                                }
-                                u += m.size() - 1;
+                            if(distance_only == true){
+                                return shortestpath;
                             }
                         }
                     }
                 }
-                v.clear();
+
+                if(distance_only == false){
+                    vector<vector<string>> v = visited_list;
+                    int u = 0;
+                    if(v.size() > 0){
+                        for(int index = 0; index < v.size(); index++){
+                            int a = visited_list.size() - v.size();
+                            if((v[index].back() == currentNode)){
+                                vector<vector<string>> m = duplicate_vector(v[index], temp_visited_list.size(),temp_visited_list);
+                                if(m.size()){
+                                    for(int i = v.size() - 1; i > index + u -a -1 ; i--){
+                                        visited_list.pop_back();
+                                    }
+                                    for(vector<string> sub_m :m){
+                                        visited_list.push_back(sub_m);
+                                        if(sub_m.back() == endNode){
+                                            shortestpath.path.push_back(sub_m);
+                                        }
+                                    }
+                                    if(v.size() - (index+u+1) > 0){
+                                        for(int i = index+u+1-a ; i < v.size(); i++){
+                                            visited_list.push_back(v[i]);
+                                        }
+                                    }
+                                    u += m.size() - 1;
+                                }
+                            }
+                        }
+                    }
+                    v.clear();
+                }
             }
             if(find(visited.begin(), visited.end(), currentNode) == visited.end()){
                 visited.push_back(currentNode);
@@ -167,4 +175,80 @@ nlohmann::ordered_json result_to_json(Shortest_path x){
     output["path"] = x.path;
 
     return output;
+}
+
+class argument{
+    public:
+        string start = "NULL";
+        string end = "NULL";
+        string graph = "NULL";
+        string outfile = "NULL";
+        int flag_d = 0;
+};
+
+argument parsing_argv(int argc, char** argv){
+    argument vm;
+
+    while(1){
+        int option_index = 0;
+        static struct option long_options[] = 
+        {
+            {"help", no_argument, NULL, 'h'},
+            {"start", required_argument, NULL, 's'},
+            {"end", required_argument, NULL, 'e'},
+            {"graph", optional_argument, NULL, 'g'},
+            {"distance_only", no_argument, NULL, 'd'},
+            {"outfile", optional_argument, NULL, 'o'},
+            {NULL, 0, NULL, 0}
+        };
+        int c = getopt_long(argc, argv, "hs:e:g:do:", long_options, &option_index);
+        if(c == -1){
+            break;
+        }
+        switch (c)
+        {
+        case 0:
+            cout << "long option " << long_options[option_index].name << endl;
+            if(optarg){
+                cout << "with arg " << optarg << endl;
+            }
+            break;
+        case 1: // When there is no prefix '-' in option
+            cout << "regular argument " << optarg << endl;
+            break;
+        case 'h':
+            cout << "Options:\n";
+            cout << "-h [ --help ]\t\t\tPrint the help message.\n";
+            cout << "-s [ --start ]\t\t\tStart node.\n";
+            cout << "-e [ --end ]\t\t\tEnd node.\n";
+            cout << "-g [ --graph ]\t\t\tAdjacency dictionary in json format. If graph is not provided, the program will use a demo graph.\n";
+            cout << "-o [ --outfile ]\t\tExport result as json format file.\n";
+            cout << "-d [ --distance_only ]\t\tOnly return shortest distance, not the path.\n";
+            
+            exit(EXIT_FAILURE);
+        case 's':
+            vm.start = optarg;
+            break;
+        case 'e':
+            vm.end = optarg;
+            break;
+        case 'g':
+            vm.graph = optarg;
+            break;
+        case 'd':
+            vm.flag_d = 1;
+            break;
+        case 'o':
+            vm.outfile = optarg;
+            break;
+        /*case '?':
+            //cout << "Invalid argument!" << "\n";
+            exit(EXIT_FAILURE);*/
+        case ':':
+            cout << "Missing option for " << optopt << "\n";
+            break;
+        }
+    }
+
+    return vm;
 }
