@@ -27,7 +27,7 @@ Options:
 - If there is no path between <b>Start node</b> and <b>End node</b>, their distance is set to <b>-1</b> and no path is provided.
 - If one node is used for both <b>Start</b> and <b>End node</b>, if it's self-interacted, the distance will be <b>1</b>, otherwise <b>0</b>.
 - The program will be much faster with the ```--distance_only``` mode than the return-paths mode.
-- ```--distance_information``` field is a filename. That json format file contains information about distances. Check the <i>distance_infor.json</i> for the example. 
+- ```--distance_information``` field is a filename. That <b>json format</b> file contains information about distances. Check the <i>distance_infor.json</i> for the example. 
 
 
 
