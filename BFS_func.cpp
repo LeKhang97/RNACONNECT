@@ -1,6 +1,9 @@
 #include<fstream>
 #include"support_functions.hpp"
 #include<unistd.h>
+#include"json.hpp"
+
+using json = nlohmann::json;
 
 int main(int argc, char** argv){
     map<string, vector<string>> graph;
@@ -9,7 +12,9 @@ int main(int argc, char** argv){
     string endNode = vm.end;
     string filename = vm.graph;
     string outfile = vm.outfile;
+    string distance_information = vm.distance_information;
     int distance_only = vm.flag_d;
+    json  dict_dist;
     
     try{
         if(vm.start == "NULL" || vm.end == "NULL"){
@@ -46,7 +51,17 @@ int main(int argc, char** argv){
                 }
             }
         }
-
+        if(distance_information != "NULL"){
+            ifstream dist_file(distance_information);
+            if(!dist_file){
+                cout << "Filename of distance information does not exist!" << endl;
+                return 1;
+            }
+            else{
+                cout << "Using distance dictionary to accelerate the BFS" << endl;
+                dict_dist = json::parse(dist_file);
+            }
+        }
     }
     catch(exception& e){
         cerr << "error: " << e.what() << "\n";
@@ -54,9 +69,11 @@ int main(int argc, char** argv){
     } 
 
     cout << "Start node:\t" << startNode << endl << "End node:\t" << endNode << endl;
+    
 
-    Shortest_path x =  BFS(graph, startNode, endNode, distance_only);
-    cout << "Shortest distance is:\t" << x.distance << endl;
+    Shortest_path x =  BFS(graph, startNode, endNode, distance_only, dict_dist);
+    
+    cout << "\nShortest distance is:\t" << x.distance << endl;
     if(distance_only){
         cout << "Searching shortest paths is not excecuted.\n";
     }
