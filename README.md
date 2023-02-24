@@ -11,12 +11,13 @@ You can compile this file by:<br>
 Then type ```./BFS_func -h``` for more information of the usage:
 ```
 Options:
-  -h [ --help ]                 Print the help message.
-  -s [ --start ] arg            Start node.
-  -e [ --end ] arg              End node.
-  -g [ --graph ] arg            Adjacency dictionary in json format. If graph is not provided, the program will use a demo graph.
-  -o [ --outfile ] arg          Export result as json format file.
-  -d [ --distance_only ]        Only return shortest distance, not the path.
+  -h [ --help ]                   Print the help message.
+  -s [ --start ] arg              Start node.
+  -e [ --end ] arg                End node.
+  -g [ --graph ] arg              Adjacency dictionary in json format. If graph is not provided, the program will use a demo graph.
+  -o [ --outfile ] arg            Export result as json format file.
+  -d [ --distance_only ]          Only return shortest distance, not the path.
+  -i [ --distance_information ]	  Perform the BFS faster with the known distances stored in json format file.
 ```
 
 
@@ -26,6 +27,7 @@ Options:
 - If there is no path between <b>Start node</b> and <b>End node</b>, their distance is set to <b>-1</b> and no path is provided.
 - If one node is used for both <b>Start</b> and <b>End node</b>, if it's self-interacted, the distance will be <b>1</b>, otherwise <b>0</b>.
 - The program will be much faster with the ```--distance_only``` mode than the return-paths mode.
+- ```--distance_information``` field is a filename. That json format file contains information about distances. Check the distance_infor.json for the example. 
 
 
 
